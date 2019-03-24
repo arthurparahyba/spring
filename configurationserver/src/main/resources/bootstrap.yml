@@ -7,5 +7,5 @@ spring:
           encrypt:
             enabled: false
           git:
-            uri: https://github.com/arthurparahyba/config-repo/
-            search-paths: licensingservice, organizationservice
+            uri: https://github.com/arthurparahyba/spring/
+            search-paths: config-repo/licensingservice, config-repo/organizationservice
