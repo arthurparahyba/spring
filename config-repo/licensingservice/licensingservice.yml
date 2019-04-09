@@ -11,3 +11,9 @@ spring.datasource.validationQuery: "SELECT 1"
 spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation: true
 spring.jpa.properties.hibernate.dialect: "org.hibernate.dialect.PostgreSQLDialect"
 spring.jpa.hibernate.ddl-auto: update
+
+hystrix.org.requestVolumeThreshold: 10
+hystrix.org.errorThresholdPercentage: 75
+hystrix.org.sleepWindowInMilliseconds: 7000
+hystrix.org.timeInMilliseconds: 15000
+hystrix.org.numBuckets: 5
