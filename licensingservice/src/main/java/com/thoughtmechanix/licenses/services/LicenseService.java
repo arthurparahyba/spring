@@ -39,18 +39,13 @@ public class LicenseService {
 	}
 
 
-//	@HystrixCommand(commandProperties= {
-//			@HystrixProperty(name="execution.isolation.thread.timeoutInMilliseconds", value="12000")
-//	})
 	@HystrixCommand(fallbackMethod="buildFallbackLicenseList",
-			threadPoolKey="licensesByOrgThreadPool",
-			threadPoolProperties= {
-					@HystrixProperty(name="coreSize", value="25"),
-					@HystrixProperty(name="maxQueueSize", value="10")
-			})
+			commandProperties = {
+					@HystrixProperty(name="execution.isolation.strategy", value="SEMAPHORE")//entender melhor o significado disso
+			}
+	)
 	public List<License> getLicensesByOrg(String organizationId) {
-		//randomlyRunLong();
-		
+		randomlyRunLong();
 		return licenseRepository.findByOrganizationId(organizationId);
 	}
 	

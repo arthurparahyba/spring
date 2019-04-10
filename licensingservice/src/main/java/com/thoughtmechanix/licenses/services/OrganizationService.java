@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import com.thoughtmechanix.licenses.clients.OrganizationDiscoveryClient;
 import com.thoughtmechanix.licenses.clients.OrganizationFeignClient;
 import com.thoughtmechanix.licenses.clients.OrganizationRestTemplateClient;
@@ -21,7 +22,19 @@ public class OrganizationService {
 	@Autowired
 	private OrganizationFeignClient organizationFeignClient;
 	
-	@HystrixCommand(fallbackMethod="buildFallbackOrganization", threadPoolKey="orgThreadPool")
+	@HystrixCommand(fallbackMethod="buildFallbackOrganization", threadPoolKey="orgThreadPool",
+			threadPoolProperties= {
+					@HystrixProperty(name="coreSize", value="25"),
+					@HystrixProperty(name="maxQueueSize", value="10")
+			},
+			commandProperties = {
+				@HystrixProperty(name="circuitBreaker.requestVolumeThreshold", value="10"),
+				@HystrixProperty(name="circuitBreaker.errorThresholdPercentage",value="75"),
+				@HystrixProperty(name="circuitBreaker.sleepWindowInMilliseconds",value="7000"),
+				@HystrixProperty(name="metrics.rollingStats.timeInMilliseconds", value="15000"),
+				@HystrixProperty(name="metrics.rollingStats.numBuckets", value="5")
+			}
+	)
 	public Organization getOrganizationById(String organizationId) {
 		return retrieveOrgInfo(organizationId, "feign");
 	}
